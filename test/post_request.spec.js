@@ -15,15 +15,37 @@ describe('API Routes', () => {
         var resp = JSON.parse(response.body)
         response.should.have.status(201);
         resp.should.be.a("object");
-        resp.foods.should.have.property("id");
-        resp.foods.should.have.property("name");
-        resp.foods.should.have.property("calories");
-        resp.foods.name.should.equal("goodburger");
-        resp.foods.calories.should.equal(42);
-        resp.foods.should.have.property("calories");
+        resp.food.should.have.property("id");
+        resp.food.should.have.property("name");
+        resp.food.should.have.property("calories");
+        resp.food.name.should.equal("goodburger");
+        resp.food.calories.should.equal(42);
+        resp.food.should.have.property("calories");
         done();
       })
-    })
-  }) 
-});
+    });
 
+    it("Returns error if wrong attribute is sent", done =>  {
+      chai.request(server)
+      .post("/api/v1/foods")
+      .send({good: "goodburger", calories: 42})
+      .end((err, response) => {
+        response.should.have.status(406);
+        response.body.error.should.equal('Expected format: { name: <String>, calories: <String> }. You\'re missing a "name" property.');
+        done();
+      })
+    });
+
+    it("Returns error if no attributes are sent", done =>  {
+      chai.request(server)
+      .post("/api/v1/foods")
+      .send({})
+      .end((err, response) => {
+        response.should.have.status(406);
+        response.body.error.should.equal('Expected format: { name: <String>, calories: <String> }. You\'re missing a "name" property.');
+        done();
+      })
+    });
+
+  })
+});
