@@ -28,13 +28,13 @@ app.post('/api/v1/foods', (request, response) => {
     }
   }
 
+  console.log(food);
+
   database('foods').insert(food, ['id', 'name', 'calories'])
     .then(food => {
-      response.status(201).json({
-        id: food[0],
-        name: food[1],
-        calories: food[2]
-      })
+      response.status(201).json(JSON.stringify({
+        foods: food[0]
+      }))
     })
     .catch(error => {
       response.status(500).json({
