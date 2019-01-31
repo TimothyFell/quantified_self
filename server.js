@@ -45,7 +45,42 @@ app.post('/api/v1/foods', (request, response) => {
         error
       });
     });
-});
+  });
+
+  database('foods').where('id', params.id).select().update({
+      "name": food.name,
+      "calories": food.calories
+    }, '*')
+    .then(food => {
+      response.status(200).json({
+        food
+      });
+    })
+    .catch(error => {
+      response.status(400).json({
+        error
+      });
+    });
+
+    app.delete('/api/v1/foods/:id', (request, response) => {
+      database('foods').where('id', request.params.id).del()
+        .then(foods => {
+          if (foods == 1) {
+            response.status(204).json({
+              success: true
+            });
+          } else {
+            response.status(404).json({
+              error
+            });
+          }
+        })
+        .catch(error => {
+          response.status(500).json({
+            error
+          });
+        });
+    })
 
 
 module.exports = app;
