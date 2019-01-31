@@ -1,3 +1,5 @@
+const pry = require('pryjs');
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -53,6 +55,21 @@ app.get('/api/v1/foods', (request, response) => {
   .catch((error) => {
     response.status(500).json({ error });
   });
+});
+
+app.get('/api/v1/foods/:id', (request, response) => {
+  database('foods').where('id', request.params.id).select()
+    .then((food) => {
+      if (food.length) {
+        var returned_food = {food: food[0]}
+        response.status(200).json(returned_food);
+      } else {
+        response.status(404).json("Not Found");
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
 });
 
 
