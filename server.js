@@ -32,8 +32,6 @@ app.post('/api/v1/foods', (request, response) => {
     }
   }
 
-  console.log(food);
-
   database('foods').insert(food, ['id', 'name', 'calories'])
     .then(food => {
       response.status(201).json(JSON.stringify({
@@ -49,12 +47,12 @@ app.post('/api/v1/foods', (request, response) => {
 
 app.get('/api/v1/foods', (request, response) => {
   database('foods').select()
-    .then((foods) => {
-      response.status(200).json(JSON.stringify(foods));
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
-    });
+  .then((foods) => {
+    response.status(200).json(JSON.stringify(foods));
+  })
+  .catch((error) => {
+    response.status(500).json({ error });
+  });
 });
 
 
