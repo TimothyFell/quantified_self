@@ -6,7 +6,7 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 describe('API Routes', () => {
-  describe('post api/v1/foods', () => {
+  describe('POST api/v1/foods', () => {
     it("should create entry into database", done =>  {
       chai.request(server)
       .post("/api/v1/foods")
