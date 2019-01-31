@@ -56,7 +56,6 @@ describe('API Routes', () => {
       .end((err, response) => {
         response.should.have.status(200);
         var foods = JSON.parse(response.body)
-        console.log(foods)
         foods[0].should.have.property('id')
         foods[0].should.have.property('name')
         foods[0].should.have.property('calories')
