@@ -13,7 +13,11 @@ app.use(bodyParser.urlencoded({
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'quantified_self_be';
 
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
 
+// API Endpoints
 
 app.post('/api/v1/foods', (request, response) => {
   const food = request.body;
@@ -41,10 +45,6 @@ app.post('/api/v1/foods', (request, response) => {
         error
       });
     });
-});
-
-app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
 
 
