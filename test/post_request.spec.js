@@ -46,6 +46,5 @@ describe('API Routes', () => {
         done();
       })
     });
-
-  })
+  });
 });
