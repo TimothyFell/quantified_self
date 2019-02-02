@@ -1,6 +1,9 @@
 exports.seed = function (knex, Promise) {
 
 return knex.raw('TRUNCATE TABLE meals, foods, food_meals RESTART IDENTITY CASCADE')
+  .then(knex('food_meals').del())
+  .then(knex('foods').del())
+  .then(knex('meals').del())
   .then(() => {
     return Promise.all([
     knex('meals').insert([{
