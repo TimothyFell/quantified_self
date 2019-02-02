@@ -1,4 +1,4 @@
-const pry = require('pryjs');
+// const pry = require('pryjs');
 
 const express = require('express');
 const app = express();
@@ -69,6 +69,33 @@ app.get('/api/v1/foods/:id', (request, response) => {
     })
     .catch((error) => {
       response.status(500).json({ error });
+    });
+
+  app.patch('/api/v1/foods/:id', (request, response) => {
+    const food = request.body;
+    for (let requiredParameter of ['name', 'calories']) {
+      if (!food[requiredParameter]) {
+        return response
+          .status(400)
+          .send({
+            error: `Expected format: { name: <String>, calories: <Integer> }. You're missing a "${requiredParameter}" property.`
+          });
+      }
+    }
+    database('foods').where('id', request.params.id).select().update({
+        "name": food.name,
+        "calories": food.calories
+      }, '*')
+      .then(food => {
+        response.status(200).json({
+          food
+        });
+      })
+      .catch(error => {
+        response.status(400).json({
+          error
+        });
+      });
     });
 });
 
