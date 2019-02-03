@@ -100,5 +100,40 @@ app.get('/api/v1/foods/:id', (request, response) => {
       });
     });
 
+app.get('/api/v1/meals', (request, response) => {
+  database('meals')
+  .join('food_meals', 'food_meals.meal_id', '=', 'meals.id')
+  .join('foods', 'food_meals.food_id', '=', 'foods.id')
+  .select('meals.id as meal_i_d', 'meals.meal_type as meal_type', 'foods.id as id', 'foods.name as name', 'calories')
+  .then(foods => {
+    var meals = [];
+    foods.forEach( (f) => {
+      if (meals.every(function (m) {
+        return m.id != f.meal_i_d;
+      })) {
+        meals.push({
+          'id': f.meal_i_d,
+          "name": f.meal_type,
+          "foods": [{'id': f.id,
+                    'name': f.name,
+                    'calories': f.calories}]
+        })
+      } else {
+        var found_meal = meals.find(function (m) {
+          return m.id == f.meal_i_d
+        })
+        found_meal.foods.push(
+          {'id': f.id,
+            'name': f.name,
+            'calories': f.calories})
+      }
+    });
+    response.status(200).json(meals);
+  })
+  .catch((error) => {
+    response.status(500).json({ error });
+  });
+});
+
 
 module.exports = app;
