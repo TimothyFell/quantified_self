@@ -4,7 +4,7 @@
   "description": "Diary For The Food",
   "main": "server.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha --recursive --exit"
   },
   "repository": {
     "type": "git",
