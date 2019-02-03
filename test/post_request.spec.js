@@ -28,6 +28,14 @@ describe('API Routes', () => {
       });
   });
 
+  afterEach((done) => {
+    database.seed.run()
+      .then(() => done())
+      .catch(error => {
+        throw error;
+      });
+  });
+
 
   describe('POST api/v1/foods', () => {
     it("should create entry into database", done =>  {

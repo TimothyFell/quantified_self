@@ -9,23 +9,31 @@ const database = require('knex')(configuration);
 chai.use(chaiHttp);
 
 describe('API Routes', () => {
-    before((done) => {
-      database.migrate.latest()
-        .then(() => done())
-        .catch(error => {
-          throw error;
-        });
-    });
+      before((done) => {
+        database.migrate.latest()
+          .then(() => done())
+          .catch(error => {
+            throw error;
+          });
+      });
 
-    beforeEach((done) => {
-      database.seed.run()
-        .then(() => done())
-        .catch(error => {
-          throw error;
-        });
-    });
+      beforeEach((done) => {
+        database.seed.run()
+          .then(() => done())
+          .catch(error => {
+            throw error;
+          });
+      });
+
+      afterEach((done) => {
+        database.seed.run()
+          .then(() => done())
+          .catch(error => {
+            throw error;
+          });
+      });
+
   describe('get api/v1/foods', () => {
-
     it("should return all food entries in database", done =>  {
       chai.request(server)
       .get("/api/v1/foods")

@@ -1,4 +1,4 @@
-// const pry = require('pryjs');
+const pry = require('pryjs');
 
 const express = require('express');
 const app = express();
@@ -70,6 +70,7 @@ app.get('/api/v1/foods/:id', (request, response) => {
     .catch((error) => {
       response.status(500).json({ error });
     });
+  });
 
   app.patch('/api/v1/foods/:id', (request, response) => {
     const food = request.body;
@@ -87,9 +88,10 @@ app.get('/api/v1/foods/:id', (request, response) => {
         "calories": food.calories
       }, '*')
       .then(food => {
-        response.status(200).json({
-          food
-        });
+
+        response.status(200).json(
+          {"food": food[0]}
+        );
       })
       .catch(error => {
         response.status(400).json({
@@ -97,7 +99,6 @@ app.get('/api/v1/foods/:id', (request, response) => {
         });
       });
     });
-});
 
 
 module.exports = app;

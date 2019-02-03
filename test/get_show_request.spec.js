@@ -1,4 +1,4 @@
-// const pry = require('pryjs')
+const pry = require('pryjs')
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
@@ -11,21 +11,30 @@ chai.use(chaiHttp);
 
 describe('API Routes', () => {
   describe('GET api/v1/foods/:id', () => {
-      before((done) => {
-        database.migrate.latest()
-          .then(() => done())
-          .catch(error => {
-            throw error;
-          });
-      });
+        before((done) => {
+          database.migrate.latest()
+            .then(() => done())
+            .catch(error => {
+              throw error;
+            });
+        });
 
-      beforeEach((done) => {
-        database.seed.run()
-          .then(() => done())
-          .catch(error => {
-            throw error;
-          });
-      });
+        beforeEach((done) => {
+          database.seed.run()
+            .then(() => done())
+            .catch(error => {
+              throw error;
+            });
+        });
+
+        afterEach((done) => {
+          database.seed.run()
+            .then(() => done())
+            .catch(error => {
+              throw error;
+            });
+        });
+        
     // happy path
     it("should return the requested food with attributes", done =>  {
       chai.request(server)
