@@ -135,5 +135,34 @@ app.get('/api/v1/meals', (request, response) => {
   });
 });
 
+app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
+
+  database('food_meals').where('meal_id', request.params.meal_id)
+    .join('foods', 'food_meals.food_id', '=', 'foods.id')
+    .join('meals', 'food_meals.meal_id', '=', 'meals.id')
+    .select('foods.id AS id', 'foods.name AS name', 'calories', 'meals.meal_type AS meal_name', 'meals.id AS meal_id ')
+    .then(foods => {
+      let foods_for_meal = [];
+
+      let meal_name = foods[0].meal_name;
+      foods.forEach((f) => {
+        delete f.meal_name;
+        foods_for_meal.push(f)
+      });
+
+      response.status(200).json({
+        'id': request.params.meal_id,
+        'meal': meal_name,
+        'foods': foods_for_meal
+      })
+    })
+    .catch((error) => {
+      response.status(404).json({
+        error
+      });
+    });
+});
+
+
 
 module.exports = app;
