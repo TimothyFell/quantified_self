@@ -1,4 +1,3 @@
-const pry = require('pryjs')
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
@@ -34,7 +33,7 @@ describe('API Routes', () => {
               throw error;
             });
         });
-        
+
     // happy path
     it("should return the requested food with attributes", done =>  {
       chai.request(server)
