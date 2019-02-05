@@ -1,5 +1,3 @@
-const pry = require('pryjs');
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -59,46 +57,35 @@ app.get('/api/v1/foods', (request, response) => {
 
 app.get('/api/v1/foods/:id', (request, response) => {
   database('foods').where('id', request.params.id).select()
-    .then((food) => {
-      if (food.length) {
-        var returned_food = {food: food[0]}
-        response.status(200).json(returned_food);
-      } else {
-        response.status(404).json("Not Found");
-      }
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
+  .then((food) => {
+    if (food.length) {
+      var returned_food = {food: food[0]}
+      response.status(200).json(returned_food);
+    } else {
+      response.status(404).json("Not Found");
+    }
+  })
+  .catch((error) => {
+    response.status(500).json({ error });
+  });
+});
+
+app.patch('/api/v1/foods/:id', (request, response) => {
+  const {name, calories} = request.body;
+
+  database('foods').where('id', request.params.id)
+  .select().update({name, calories}, '*')
+  .then(food => {
+    response.status(200).json(
+      {"food": food[0]}
+    );
+  })
+  .catch(error => {
+    response.status(400).json({
+      error
     });
   });
-
-  app.patch('/api/v1/foods/:id', (request, response) => {
-    const food = request.body;
-    for (let requiredParameter of ['name', 'calories']) {
-      if (!food[requiredParameter]) {
-        return response
-          .status(400)
-          .send({
-            error: `Expected format: { name: <String>, calories: <Integer> }. You're missing a "${requiredParameter}" property.`
-          });
-      }
-    }
-    database('foods').where('id', request.params.id).select().update({
-        "name": food.name,
-        "calories": food.calories
-      }, '*')
-      .then(food => {
-
-        response.status(200).json(
-          {"food": food[0]}
-        );
-      })
-      .catch(error => {
-        response.status(400).json({
-          error
-        });
-      });
-    });
+});
 
 app.get('/api/v1/meals', (request, response) => {
   database('meals')
