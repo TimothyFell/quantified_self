@@ -152,25 +152,26 @@ app.get('/api/v1/meals/:meal_id/foods', (request, response) => {
   });
 });
 
-app.post('/api/v1/meals/:meal_id/foods/:id', (request, response) => {
+app.post('/api/v1/meals/:meal_id/foods/:food_id', (request, response) => {
+
   database('food_meals').insert({
-    'food_id': request.params.id,
-    'meal_id': request.params.meal_id
+    'food_id': parseInt(request.params.food_id),
+    'meal_id': parseInt(request.params.meal_id)
   }, '*')
   .then(food_meal => {
-    database('food_meals')
+    return database('food_meals')
     .where('food_meals.id', food_meal[0].id)
-    .join('foods', 'food_meals.food_id', '=', food_meal[0].food_id)
-    .join('meals', 'food_meals.meal_id', '=', food_meal[0].meal_id)
-    .select('foods.name AS name', 'meals.meal_type AS meal_name')
+    .join('foods', 'food_meals.food_id', '=', 'foods.id')
+    .join('meals', 'food_meals.meal_id', '=', 'meals.id')
+    .select('foods.name AS food_name', 'meals.meal_type AS meal_name')
   })
   .then(names => {
-    eval(pry.it);
-    food_name = database.raw(`SELECT name FROM foods WHERE id = ${food_meal[0].food_id}`);
-    meal_name = database.raw(`SELECT meal_type FROM meals WHERE id = ${food_meal[0].meal_id}`);
     response.status(201).json({
-      'message': `Successfully added ${food_name} to ${meal_name}`
+      'message': `Successfully added ${names[0].food_name} to ${names[0].meal_name}`
     })
+  })
+  .catch((error) => {
+    response.status(404).json({'error': 'One of the ids sent was indvalid' })
   })
 });
 
