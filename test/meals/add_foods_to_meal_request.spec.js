@@ -58,7 +58,7 @@ describe('API Routes', () => {
       })
     })
 
-    it('should return a status of 404 when the food your adding doenst exist', done => {
+    it('should return a status of 404 when the meal your adding doenst exist', done => {
       chai.request(server)
       .post("/api/v1/meals/1000000000/foods/1")
       .end((err, response) => {
