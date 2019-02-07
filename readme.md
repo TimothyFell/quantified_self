@@ -204,7 +204,7 @@ $ mocha ./spec/path/to/file/or/directory --exit
   ````
 
 ### 6. Get a single meal
-  #### Verb /Path: DELETE /api/v1/meals/:id
+  #### Verb /Path: GET /api/v1/meals/:id
   #### Headers:
   ````javascript
   // nothing
