@@ -33,6 +33,10 @@ $ knex migrate:latest
 $ knex seed:run
 ````
 
+## Contributions
+
+If you would like to contribute to this project please fork the repository and send us a pull request with your changes. To get started once you fork, follow the instructions above in the Setup section.
+
 
 ## Configuration
   There are a few more steps before you can get the tests up and running.
